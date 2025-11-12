@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../src/Db.php';
-require_once __DIR__ . '/../src/Response.php';
+require_once __DIR__ . '/../src/Core/Db.php';
+require_once __DIR__ . '/../src/Core/Response.php';
 
-use App\Db;
+use App\Core\Db;
 
 $pdo = Db::pdo();
 

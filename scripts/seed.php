@@ -1,8 +1,8 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../src/Db.php';
-use App\Db;
+require_once __DIR__ . '/../src/Core/Db.php';
+use App\Core\Db;
 
 $pdo = Db::pdo();
 
