@@ -3,4 +3,4 @@ composer.lock
 .DS_Store
 .vscode/
 .idea/
-var/*.sqlite
+var/forum.sqlite
