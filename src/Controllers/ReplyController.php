@@ -5,68 +5,68 @@ use App\Core\Db;
 use App\Core\Response;
 
 class ReplyController {
-    public static function getAll() {
+    public static function getAll(): string {
         $pdo = Db::pdo();
-        $st = $pdo->query("
+        $st = $pdo->query(query: "
             SELECT r.*, u.username, tp.title AS topic_title
             FROM replies r
             JOIN users u ON u.id = r.user_id
             JOIN topics tp ON tp.id = r.topic_id
             ORDER BY r.id DESC
         ");
-        return Response::json(['status'=>200,'data'=>$st->fetchAll()]);
+        return Response::json(payload: ['status'=>200,'data'=>$st->fetchAll()]);
     }
 
-    public static function getOne(array $params) {
+    public static function getOne(array $params): string {
         $id=(int)($params['id']??0);
-        if($id<=0)return Response::json(['error'=>'Invalid id'],400);
+        if($id<=0)return Response::json(payload: ['error'=>'Invalid id'],status: 400);
         $pdo=Db::pdo();
-        $st=$pdo->prepare("SELECT r.*,u.username,tp.title AS topic_title
+        $st=$pdo->prepare(query: "SELECT r.*,u.username,tp.title AS topic_title
             FROM replies r JOIN users u ON u.id=r.user_id
             JOIN topics tp ON tp.id=r.topic_id WHERE r.id=:id");
-        $st->execute([':id'=>$id]);
+        $st->execute(params: [':id'=>$id]);
         $row=$st->fetch();
         return $row
-            ? Response::json(['status'=>200,'data'=>$row])
-            : Response::json(['error'=>'Reply not found'],404);
+            ? Response::json(payload: ['status'=>200,'data'=>$row])
+            : Response::json(payload: ['error'=>'Reply not found'],status: 404);
     }
 
-    public static function create() {
+    public static function create(): string {
         $b=jsonInput();
         $topic=(int)($b['topic_id']??0);
         $user=(int)($b['user_id']??0);
-        $body=trim($b['body']??'');
+        $body=trim(string: $b['body']??'');
         if($topic<=0||$user<=0||$body==='')
-            return Response::json(['error'=>'topic_id,user_id,body required'],422);
+            return Response::json(payload: ['error'=>'topic_id,user_id,body required'],status: 422);
         $pdo=Db::pdo();
-        $chk=$pdo->prepare("SELECT id FROM topics WHERE id=:id");
-        $chk->execute([':id'=>$topic]);
-        if(!$chk->fetch())return Response::json(['error'=>'Topic not found'],404);
-        $st=$pdo->prepare("INSERT INTO replies (topic_id,user_id,body) VALUES (:t,:u,:b)");
-        $st->execute([':t'=>$topic,':u'=>$user,':b'=>$body]);
-        return Response::json(['status'=>201,'data'=>['id'=>$pdo->lastInsertId()]]);
+        $chk=$pdo->prepare(query: "SELECT id FROM topics WHERE id=:id");
+        $chk->execute(params: [':id'=>$topic]);
+        if(!$chk->fetch())return Response::json(payload: ['error'=>'Topic not found'],status: 404);
+        $st=$pdo->prepare(query: "INSERT INTO replies (topic_id,user_id,body) VALUES (:t,:u,:b)");
+        $st->execute(params: [':t'=>$topic,':u'=>$user,':b'=>$body]);
+        return Response::json(payload: ['status'=>201,'data'=>['id'=>$pdo->lastInsertId()]]);
     }
 
-    public static function delete(array $params){
+    public static function delete(array $params): string{
         $id=(int)($params['id']??0);
-        if($id<=0)return Response::json(['error'=>'Invalid id'],400);
+        if($id<=0)return Response::json(payload: ['error'=>'Invalid id'],status: 400);
         $pdo=Db::pdo();
-        $st=$pdo->prepare("DELETE FROM replies WHERE id=:id");
-        $st->execute([':id'=>$id]);
+        $st=$pdo->prepare(query: "DELETE FROM replies WHERE id=:id");
+        $st->execute(params: [':id'=>$id]);
         return $st->rowCount()
-            ? Response::json(['status'=>200,'data'=>['deleted'=>$id]])
-            : Response::json(['error'=>'Reply not found'],404);
+            ? Response::json(payload: ['status'=>200,'data'=>['deleted'=>$id]])
+            : Response::json(payload: ['error'=>'Reply not found'],status: 404);
     }
 
-    public static function getByTopic(array $params){
+    public static function getByTopic(array $params): string{
         $topic=(int)($params['id']??0);
-        if($topic<=0)return Response::json(['error'=>'Invalid id'],400);
+        if($topic<=0)return Response::json(payload: ['error'=>'Invalid id'],status: 400);
         $pdo=Db::pdo();
-        $chk=$pdo->prepare("SELECT id FROM topics WHERE id=:id");
-        $chk->execute([':id'=>$topic]);
-        if(!$chk->fetch())return Response::json(['error'=>'Topic not found'],404);
-        $st=$pdo->prepare("SELECT r.*,u.username FROM replies r JOIN users u ON u.id=r.user_id WHERE r.topic_id=:tid");
-        $st->execute([':tid'=>$topic]);
-        return Response::json(['status'=>200,'data'=>$st->fetchAll()]);
+        $chk=$pdo->prepare(query: "SELECT id FROM topics WHERE id=:id");
+        $chk->execute(params: [':id'=>$topic]);
+        if(!$chk->fetch())return Response::json(payload: ['error'=>'Topic not found'],status: 404);
+        $st=$pdo->prepare(query: "SELECT r.*,u.username FROM replies r JOIN users u ON u.id=r.user_id WHERE r.topic_id=:tid");
+        $st->execute(params: [':tid'=>$topic]);
+        return Response::json(payload: ['status'=>200,'data'=>$st->fetchAll()]);
     }
 }

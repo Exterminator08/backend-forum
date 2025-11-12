@@ -1,8 +1,8 @@
 <?php
 if (php_sapi_name() === 'cli-server') {
-    $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+    $path = parse_url(url: $_SERVER['REQUEST_URI'], component: PHP_URL_PATH);
     $full = __DIR__ . $path;
-    if (is_file($full)) {
+    if (is_file(filename: $full)) {
         return false;
     }
 }

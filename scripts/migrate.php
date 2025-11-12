@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS users (
   username TEXT NOT NULL UNIQUE,
   email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
-  role TEXT NOT NULL DEFAULT 'user', -- 'admin' | 'user'
+  role TEXT NOT NULL DEFAULT 'user',
   created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -58,6 +58,6 @@ CREATE TABLE IF NOT EXISTS replies (
 COMMIT;
 SQL;
 
-$pdo->exec($sql);
+$pdo->exec(statement: $sql);
 
 echo "Migrations done.\n";

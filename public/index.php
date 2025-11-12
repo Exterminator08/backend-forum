@@ -17,31 +17,31 @@ use App\Controllers\ThreadController;
 use App\Controllers\TopicController;
 use App\Controllers\ReplyController;
 
-header('Content-Type: application/json; charset=utf-8');
+header(header: 'Content-Type: application/json; charset=utf-8');
 
 $router = new Router();
 
 // Health
-$router->get('/health', [HealthController::class, 'index']);
+$router->get(pattern: '/health', handler: [HealthController::class, 'index']);
 
 // Threads
-$router->get('/threads', [ThreadController::class, 'getAll']);
-$router->get('/thread/{id}', [ThreadController::class, 'getOne']);
-$router->post('/threads', [ThreadController::class, 'create']);
-$router->delete('/thread/{id}', [ThreadController::class, 'delete']);
-$router->get('/thread/{id}/topics', [TopicController::class, 'getByThread']);
+$router->get(pattern: '/threads', handler: [ThreadController::class, 'getAll']);
+$router->get(pattern: '/thread/{id}', handler: [ThreadController::class, 'getOne']);
+$router->post(pattern: '/threads', handler: [ThreadController::class, 'create']);
+$router->delete(pattern: '/thread/{id}', handler: [ThreadController::class, 'delete']);
+$router->get(pattern: '/thread/{id}/topics', handler: [TopicController::class, 'getByThread']);
 
 // Topics
-$router->get('/topics', [TopicController::class, 'getAll']);
-$router->get('/topic/{id}', [TopicController::class, 'getOne']);
-$router->post('/topics', [TopicController::class, 'create']);
-$router->delete('/topic/{id}', [TopicController::class, 'delete']);
-$router->get('/topic/{id}/replies', [ReplyController::class, 'getByTopic']);
+$router->get(pattern: '/topics', handler: [TopicController::class, 'getAll']);
+$router->get(pattern: '/topic/{id}', handler: [TopicController::class, 'getOne']);
+$router->post(pattern: '/topics', handler: [TopicController::class, 'create']);
+$router->delete(pattern: '/topic/{id}', handler: [TopicController::class, 'delete']);
+$router->get(pattern: '/topic/{id}/replies', handler: [ReplyController::class, 'getByTopic']);
 
 // Replies
-$router->get('/replies', [ReplyController::class, 'getAll']);
-$router->get('/reply/{id}', [ReplyController::class, 'getOne']);
-$router->post('/replies', [ReplyController::class, 'create']);
-$router->delete('/reply/{id}', [ReplyController::class, 'delete']);
+$router->get(pattern: '/replies', handler: [ReplyController::class, 'getAll']);
+$router->get(pattern: '/reply/{id}', handler: [ReplyController::class, 'getOne']);
+$router->post(pattern: '/replies', handler: [ReplyController::class, 'create']);
+$router->delete(pattern: '/reply/{id}', handler: [ReplyController::class, 'delete']);
 
-echo $router->dispatch($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
+echo $router->dispatch(method: $_SERVER['REQUEST_METHOD'], uri: $_SERVER['REQUEST_URI']);
